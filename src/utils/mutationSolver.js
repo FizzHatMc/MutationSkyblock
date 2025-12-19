@@ -1,4 +1,4 @@
-import INITIAL_DATA from '../data/mutations.json';
+import INITIAL_DATA from '../data/mutations2.json';
 
 // --- HELPERS ---
 

@@ -235,7 +235,7 @@
     "type": "mutation",
     "color": "#818cf8",
     "image": "/images/lonelily.png",
-    "howToGet": "Appears randomly over time on empty farmland or dirt",
+    "howToGet": "Appears randomly over time on empty farmland or dirt\n",
     "requirements": [],
     "perks": []
   },
@@ -533,11 +533,8 @@
     "type": "mutation",
     "color": "#172554",
     "image": "/images/shellfruit.png",
-    "howToGet": "Explode a Turtlellini with a Blastberry",
-    "requirements": [
-      { "id": "turtlellini", "amount": 1 },
-      { "id": "blastberry", "amount": 1 }
-    ],
+    "howToGet": "",
+    "requirements": [],
     "perks": []
   },
   {
