@@ -1,0 +1,53 @@
+name: Create and Publish Docker Image
+
+# Dieser Workflow startet immer, wenn du Code auf den 'main' oder 'master' Branch pushst
+on:
+  push:
+    branches: ['main', 'master']
+
+# Umgebungsvariablen definieren
+env:
+  REGISTRY: ghcr.io
+  # image name = dein-user/dein-repo
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    
+    # Wichtig: Rechte, um das Image in die Registry zu schreiben
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      # 1. Quellcode herunterladen
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Bei der GitHub Container Registry (GHCR) einloggen
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # 3. Metadaten (Tags, Labels) extrahieren
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          # Setzt den Tag auf 'latest', wenn wir auf den Hauptbranch pushen
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      # 4. Das Image bauen und hochladen (Push)
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
